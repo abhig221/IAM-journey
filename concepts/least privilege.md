@@ -37,6 +37,18 @@ It uses a tiered permission model to control what users can instruct the agent t
 
 The `/pair approve` command, which grants admin access, doesn't check who is actually issuing the approval. A user with basic pairing access — the lowest tier — can run `/pair approve` and self-approve themselves straight to admin. No authorization check at all.
 
+### How an attacker gets there in the first place
+
+Before exploiting the vulnerability an attacker needs to reach the interface. There are a few realistic ways this happens.
+
+Since OpenClaw connects through messenger apps like Telegram or WhatsApp, anyone who finds the bot link or phone number associated with the instance can send it commands. The pairing process grants basic access automatically as part of onboarding — so an attacker finds the bot, sends `/pair`, gets basic pairing access, and immediately runs `/pair approve` to self-escalate. The whole attack takes under a minute and requires zero technical skill.
+
+If the OpenClaw instance is running on a network that's exposed to the internet — even accidentally — tools like Shodan can discover it. A misconfigured instance with a public IP is findable by anyone scanning for exposed services. From there the same attack applies.
+
+If an attacker already has access to the local network through phishing or malware on another device, they can reach the OpenClaw instance from inside and interact with it directly.
+
+This is why authorization checks can never assume only legitimate users will reach a command. The correct approach is to enforce authorization at the point of execution regardless of how someone got there — never rely on "only the right people know this exists" as a security control.
+
 ### What IAM principles this violates
 
 **Least privilege** — the approve command shouldn't be accessible at the lowest permission tier. The gate that should restrict this to an authorized role is completely missing.
@@ -57,6 +69,7 @@ In a normal app, privilege escalation means you can read more data. In an autono
 - Self-approval is rejected — requestor and approver must be different entities
 - Elevated permissions are time-limited and automatically revoked
 - Every approval is logged with who approved, when, and what was granted
+- The interface itself should require authentication before pairing is even possible, so random outside users can't initiate the process at all
 
 ### The bigger picture
 
