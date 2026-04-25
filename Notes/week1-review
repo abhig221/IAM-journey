@@ -1,0 +1,79 @@
+# Week 1 Review — From Memory
+
+## Day 1
+
+The first day was focused on setting up the GitHub repo, where I'll be
+posting and keeping track of everything I've done through this roadmap,
+the Kali Linux VM, which I'll use in the future for labs, and Feedly,
+which will help me stay up to date with related news.
+
+## Day 2
+
+Day 2 was the first day of taking notes and learning the main concepts
+of IAM. Authentication is the process of identifying whether or not a
+user, machine, or whatever is requesting access is who they claim to be.
+Authorization is the process of granting or denying access based on
+whether they are who they say they are. Identity claims contain things
+like the username and password of the entity trying to gain access.
+Tokens are given to the user once they've been authenticated and carry
+identity claims and attributes so the system can make authorization
+decisions later. Tokens are stored client-side, meaning the server
+doesn't need to look anything up — it just reads what's inside the
+token. Sessions are different — they're created server-side right after
+authentication and the server checks authorization every time the entity
+tries to do something, confirming whether they're allowed to do what
+they're attempting. Access decisions are the process that determines who
+has access and what they have access to. Authn and Authz are kept
+separate because it increases security — they work hand in hand to
+provide proper security measures.
+
+## Day 3
+
+RBAC, or role-based access control, is a system that controls who gets
+access to what based on their role. Roles are essentially titles that
+entities fall under and each role has a certain amount of privilege in
+the system. Permissions are the pieces inside each role that determine
+what the people assigned to that role are allowed to do and what
+resources they have access to. Role assignment is the process of
+assigning roles based on what the entity needs to complete their task
+and nothing more. Role explosion is when too many roles are created from
+trying to make roles too specific for different tasks.
+
+## Day 4
+
+ABAC, or attribute-based access control, is a similar system to RBAC
+but grants access in a different way. ABAC assigns and grants access
+based on subjects, objects, actions, and environment attributes.
+Subjects are the entities that want access, objects are the resources
+they want access to, actions are what the subject is trying to do with
+the object — whether that's read, write, delete, or execute — and
+environment attributes are things like the time of day or where the
+entity is requesting access from. Policy engines are the software that
+evaluate all the attributes against the defined rules and produce a
+permit or deny decision. XACML is the industry standard language for
+writing those rules. PEP is what grants or denies the entity access
+based on what PDP tells it. PDP requests and receives information from
+PIP to make the decision of whether it should tell PEP to grant or deny
+access. PAP is where security teams write and manage the access
+policies. ABAC beats RBAC when access needs to be granted based on more
+nuanced criteria than just roles.
+
+## Day 5
+
+The principle of least privilege is the idea that entities should only
+have access to what they need and nothing more. Standing access grants
+an entity access to privileged resources at all times, even when they
+don't need it. Just-in-time access grants access only when a user needs
+it and removes it when they don't need it anymore. Over-provisioning is
+the number one IAM risk because if an account gets compromised and has
+access to more than it needs, it gives the attacker more leeway to
+control or view resources they shouldn't have and potentially escalate
+the situation through lateral movement. PAM is essentially least
+privilege enforced specifically on the highest-risk accounts, such as
+admins and service accounts.
+
+## Questions to revisit
+
+- What is the full three-component breakdown of a role assignment?
+- How exactly does a token get validated on the server side?
+- What are the most common real-world examples of role explosion?
