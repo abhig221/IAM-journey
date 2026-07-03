@@ -1,6 +1,9 @@
 # DNS for IAM
 
+---
+
 ## Overview
+
 DNS, or Domain Name System, is essentially the phone book of a network.
 It translates human-readable domain names into IP addresses that machines
 can actually use to communicate. Without DNS, every device would need to
@@ -29,8 +32,8 @@ and LDAP services are running so that clients can find them automatically.
 ## DNS zones
 
 DNS zones are used to delegate administrative control over a portion of
-the DNS namespace. A zone is a boundary of authority — so `company.com`
-might be one zone managed by the IT team, and `sales.company.com` might
+the DNS namespace. A zone is a boundary of authority — so company.com
+might be one zone managed by the IT team, and sales.company.com might
 be a separate zone delegated to a different administrator. This makes
 large DNS environments easier to manage by dividing responsibility.
 
@@ -57,22 +60,22 @@ thing you check.
 
 ## MXToolbox exercise
 
-I tried looking up `_kerberos._tcp.dc._msdcs.contoso.com` on MXToolbox
-and got "DNS Record not found." This is because `contoso.com` is a
-placeholder domain Microsoft uses in documentation — it doesn't exist
+I tried looking up _kerberos._tcp.dc._msdcs.contoso.com on MXToolbox
+and got DNS Record not found. This is because contoso.com is a
+placeholder domain Microsoft uses in documentation — it does not exist
 publicly. When I tried looking up real Microsoft domains, the SRV records
-still didn't resolve publicly.
+still did not resolve publicly.
 
 This is actually correct security practice. Internal AD SRV records are
 intentionally private and not publicly resolvable — exposing them would
 advertise internal infrastructure to anyone scanning the internet. The
-fact that these records don't show up publicly is by design, not a
+fact that these records do not show up publicly is by design, not a
 misconfiguration.
 
 ---
 
 ## Questions to revisit
-- [ ] What exactly happens step by step when a Kerberos SRV record
-      lookup fails?
-- [ ] How does AD automatically register and update SRV records in DNS
-      when a domain controller comes online?
+
+- [ ] What exactly happens step by step when a Kerberos SRV record lookup fails?
+
+- [ ] How does AD automatically register and update SRV records in DNS when a domain controller comes online?
