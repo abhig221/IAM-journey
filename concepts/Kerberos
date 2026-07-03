@@ -1,6 +1,9 @@
 # Kerberos
 
+---
+
 ## Overview
+
 Kerberos is an authentication protocol used by Active Directory to verify
 the identity of users and services. It uses the KDC, or Key Distribution
 Center, to authenticate users based on passwords. The KDC contains two
@@ -43,7 +46,25 @@ everything.
 
 ---
 
-## Full authentication flow 
+## Full authentication flow
+
+```
+1. User enters password and it gets hashed
+
+2. AS-REQ — client sends hash to the Authentication Service
+
+3. AS-REP — AS returns TGT and session key if hash matches
+
+4. TGS-REQ — client presents TGT to the Ticket Granting Service
+             to request access to a specific resource
+
+5. TGS-REP — TGS returns a service ticket for that specific resource
+
+6. Client presents service ticket directly to the resource
+
+7. Access granted
+```
+
 ---
 
 ## Kerberoasting
@@ -64,13 +85,14 @@ privileges and weak passwords that never expire — making them easier to
 crack and more valuable once compromised.
 
 **Defensive controls:**
+
 - Use strong, long, randomly generated passwords on service accounts
-- Use Group Managed Service Accounts (gMSA) which rotate passwords
-  automatically
-- Monitor for unusual TGS requests — a user requesting service tickets
-  for services they never use is a detectable signal
-- Apply least privilege to service accounts so even if cracked the
-  blast radius is limited
+
+- Use Group Managed Service Accounts (gMSA) which rotate passwords automatically
+
+- Monitor for unusual TGS requests — a user requesting service tickets for services they never use is a detectable signal
+
+- Apply least privilege to service accounts so even if cracked the blast radius is limited
 
 ---
 
@@ -84,8 +106,8 @@ After a user authenticates, their TGT is stored in memory on their
 machine. An attacker who gains access to that machine can use a tool like
 Mimikatz to extract the ticket from memory and save it as a file. They
 then load that ticket into their own session on a different machine. The
-KDC treats them as the legitimate user because the ticket is valid —
-it does not verify which machine the ticket is being presented from.
+KDC treats them as the legitimate user because the ticket is valid — it
+does not verify which machine the ticket is being presented from.
 
 The attacker can access any resource the victim had access to for as long
 as the ticket is valid, which is up to 10 hours by default.
@@ -96,26 +118,23 @@ access everywhere. Second, standing access — permanent elevated privileges
 travel with the stolen ticket.
 
 **Defensive controls:**
-- Privileged Access Workstations — admin tickets should only ever be
-  issued on hardened, isolated machines so they cannot be stolen from
-  general-purpose workstations
-- Tiered administration — separating admin accounts by tier means a
-  compromised lower-tier account cannot be used to obtain higher-tier
-  tickets
-- Short ticket lifetimes — reducing the default 10 hour TGT lifetime
-  limits how long a stolen ticket remains usable
-- Credential Guard — a Windows security feature that uses virtualization
-  to protect credentials and tickets in memory, making them significantly
-  harder to extract
-- Monitor for anomalous ticket usage — a ticket being used from a new
-  IP address or unusual location is a detectable signal
+
+- Privileged Access Workstations — admin tickets should only ever be issued on hardened, isolated machines so they cannot be stolen from general-purpose workstations
+
+- Tiered administration — separating admin accounts by tier means a compromised lower-tier account cannot be used to obtain higher-tier tickets
+
+- Short ticket lifetimes — reducing the default 10 hour TGT lifetime limits how long a stolen ticket remains usable
+
+- Credential Guard — a Windows security feature that uses virtualization to protect credentials and tickets in memory, making them significantly harder to extract
+
+- Monitor for anomalous ticket usage — a ticket being used from a new IP address or unusual location is a detectable signal
 
 ---
 
 ## Questions to revisit
-- [ ] What is a Service Principal Name (SPN) and how does it relate
-      to Kerberoasting?
-- [ ] How does Credential Guard technically prevent ticket extraction
-      from memory?
-- [ ] What is a Golden Ticket attack and how does it differ from
-      Pass the Ticket?
+
+- [ ] What is a Service Principal Name (SPN) and how does it relate to Kerberoasting?
+
+- [ ] How does Credential Guard technically prevent ticket extraction from memory?
+
+- [ ] What is a Golden Ticket attack and how does it differ from Pass the Ticket?
